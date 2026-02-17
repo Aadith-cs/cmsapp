@@ -1,59 +1,79 @@
-import { Card, CardContent, CardMedia, Typography, Button, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Box,
+  Chip,
+} from "@mui/material";
 
 export default function MenuCard({ item, onOrder }) {
   return (
     <Card
       sx={{
-        width: 250,
-        margin: 2,
-        transition: "0.3s",
-        opacity: item.available ? 1 : 0.5,
-        backgroundColor: item.available ? "#e8f5e9" : "#fce4ec",
+        width: "100%",
+        maxWidth: 345,
+        borderRadius: 4,
+        boxShadow: 3,
+        transition: "transform 0.2s, box-shadow 0.2s",
         "&:hover": {
-          transform: item.available ? "scale(1.03)" : "none"
-        }
+          transform: "translateY(-4px)",
+          boxShadow: 6,
+        },
+        position: "relative",
       }}
     >
-      {item.image && (
-        <CardMedia
-          component="img"
-          height="140"
-          image={item.image}
-          alt={item.name}
-        />
-      )}
-
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          {item.name}
-        </Typography>
-
-        <Typography variant="body1" color="text.secondary">
-          Price: ₹{item.price}
-        </Typography>
-
-        <Typography
-          variant="body2"
+      <CardMedia
+        component="img"
+        height="180"
+        image={
+          item.image ||
+          "https://placehold.co/600x400/e0e0e0/ffffff?text=Food+Item"
+        }
+        alt={item.name}
+        sx={{ filter: item.available ? "none" : "grayscale(100%)" }}
+      />
+      
+      {!item.available && (
+        <Box
           sx={{
-            color: item.available ? "green" : "red",
-            fontWeight: "bold",
-            mt: 1
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            bgcolor: "rgba(255, 255, 255, 0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1,
           }}
         >
-          {item.available ? "Available" : "Not Available"}
-        </Typography>
-
-        <Box mt={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            fullWidth
-            disabled={!item.available}
-            onClick={() => onOrder(item)}
-          >
-            Order Now
-          </Button>
+          <Chip label="Unavailable" color="error" variant="filled" size="medium" />
         </Box>
+      )}
+
+      <CardContent sx={{ position: "relative", zIndex: 2 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="h6" component="div" fontWeight="bold">
+            {item.name}
+          </Typography>
+          <Typography variant="h6" color="secondary" fontWeight="bold">
+            ₹{item.price}
+          </Typography>
+        </Box>
+
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={!item.available}
+          onClick={() => onOrder && onOrder(item)}
+          sx={{ mt: 2, borderRadius: 2, py: 1 }}
+        >
+          {item.available ? "Add to Order" : "Out of Stock"}
+        </Button>
       </CardContent>
     </Card>
   );

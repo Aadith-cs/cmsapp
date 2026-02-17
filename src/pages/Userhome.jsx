@@ -1,5 +1,5 @@
 import { Typography, Grid, Container } from "@mui/material";
-import MenuCard from "../components/MenuCard";
+import MenuCard from "../components/Menucard";
 import Navbar from "../components/Navbar";
 
 export default function UserHome({ menuItems }) {

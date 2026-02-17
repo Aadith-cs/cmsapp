@@ -5,18 +5,17 @@ import {
   Button,
   Box,
   Avatar,
-  Alert
+  Alert,
+  Paper,
+  Divider,
+  Collapse
 } from "@mui/material";
-
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
-import { Collapse } from "@mui/material";
 
 export default function Profile() {
-
   const [editMode, setEditMode] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
   const [user, setUser] = useState({
     name: "John Doe",
     email: "john@gmail.com",
@@ -28,110 +27,148 @@ export default function Profile() {
   };
 
   const saveProfile = () => {
-   setEditMode(false);
-   setShowAlert(true);                    
+    setEditMode(false);
+    setShowAlert(true);
   };
 
   useEffect(() => {
-  if (showAlert) {
-    const timer = setTimeout(() => {
-      setShowAlert(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }
-}, [showAlert]);
-
+    if (showAlert) {
+      const timer = setTimeout(() => setShowAlert(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert]);
 
   return (
-    <>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", pb: 4 }}>
       <Navbar isProfilePage={true} />
-
-      <Container maxWidth="sm">
-        <Box textAlign="center" mt={4}>
-
-          <Typography variant="h5">
-            Profile
-          </Typography>
-
-          <Avatar
-            sx={{
-              width: 80,
-              height: 80,
-              margin: "20px auto",
-              bgcolor: "#6a1b9a"
-            }}
-          >
-            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-          </Avatar>
-
-        </Box>
-
-        {!editMode ? (
-
-          // ---------- VIEW MODE ----------
-          <Box mt={2}>
-
-            <Typography variant="h5" mb={2} textAlign="center" >
-              <b>{user.name}</b> 
-            </Typography>
-
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={() => setEditMode(true)}
+      
+      <Container maxWidth="sm" sx={{ mt: 6 }}>
+        <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+          <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
+            <Avatar
+              sx={{
+                width: 100,
+                height: 100,
+                bgcolor: "primary.main",
+                fontSize: "2.5rem",
+                mb: 2,
+                boxShadow: 2,
+              }}
             >
-              <b>Settings</b>
-            </Button>
-
+              {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+            </Avatar>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
+              {editMode ? "Edit Profile" : "My Profile"}
+            </Typography>
+            {!editMode && (
+              <Typography variant="body1" color="text.secondary">
+                Manage your personal details
+              </Typography>
+            )}
           </Box>
 
-        ) : (
+          <Divider sx={{ mb: 3 }} />
 
-          // ---------- EDIT MODE ----------
-          <Box mt={3}>
+          <Collapse in={showAlert}>
+            <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>
+              Profile updated successfully!
+            </Alert>
+          </Collapse>
 
-            <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-              sx={{ mb: 2 }}
-            />
+          {!editMode ? (
+            <Box>
+              <Box mb={3}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Full Name
+                </Typography>
+                <Typography variant="h6">{user.name}</Typography>
+              </Box>
+              
+              <Box mb={3}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Email Address
+                </Typography>
+                <Typography variant="h6">{user.email}</Typography>
+              </Box>
 
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{ mb: 2 }}
-              onClick={saveProfile}
-            >
-              Save
-            </Button>
+              <Box mb={4}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Phone Number
+                </Typography>
+                <Typography variant="h6">{user.phone}</Typography>
+              </Box>
 
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={() => setEditMode(false)}
-            >
-              Cancel
-            </Button>
-
-             <Typography variant="body1" mt={3} mb={2}>
-              <b>Contact Us: cmsapp@gmail.com</b> 
-            </Typography>
-
-          </Box>
-        )}
-           <Collapse in={showAlert}>
-              <Alert
-                severity="success"
-                sx={{ mt: 2 }}
+              <Button
+                variant="contained"
+                fullWidth
+                size="large"
+                onClick={() => setEditMode(true)}
+                sx={{ borderRadius: 2 }}
               >
-              Name changed successfully!
-             </Alert>
-           </Collapse>
+                Edit Profile
+              </Button>
+            </Box>
+          ) : (
+            <Box component="form" noValidate autoComplete="off">
+              <TextField
+                fullWidth
+                label="Full Name"
+                name="name"
+                value={user.name}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                value={user.email}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                disabled
+              />
+              <TextField
+                fullWidth
+                label="Phone"
+                name="phone"
+                value={user.phone}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+              />
+
+              <Box mt={4} display="flex" gap={2}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  size="large"
+                  onClick={() => setEditMode(false)}
+                  sx={{ borderRadius: 2 }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  onClick={saveProfile}
+                  sx={{ borderRadius: 2 }}
+                >
+                  Save Changes
+                </Button>
+              </Box>
+            </Box>
+          )}
+        </Paper>
+        
+        <Box textAlign="center" mt={4}>
+          <Typography variant="caption" color="text.secondary">
+            Need help? Contact us at cmsapp@gmail.com
+          </Typography>
+        </Box>
       </Container>
-    </>
+    </Box>
   );
 }

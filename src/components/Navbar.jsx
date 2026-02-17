@@ -8,10 +8,10 @@ export default function Navbar({ isProfilePage }) {
   const navigate = useNavigate();
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#6a1b9a" }}>
+    <AppBar position="sticky" elevation={4} sx={{ backgroundColor: "#6a1b9a" }}>
       <Toolbar>
 
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: "bold" }}>
           Canteen System
         </Typography>
 
