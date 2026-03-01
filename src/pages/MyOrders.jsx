@@ -1,16 +1,19 @@
 import {
     Container, Typography, Box, CircularProgress, Alert,
-    Chip, Accordion, AccordionSummary, AccordionDetails, Divider
+    Chip, Accordion, AccordionSummary, AccordionDetails, Divider, IconButton
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { orderService } from "../services/orderService";
 import { useAuth } from "../context/AuthContext";
 
 export default function MyOrders() {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -28,9 +31,14 @@ export default function MyOrders() {
         <>
             <Navbar />
             <Container maxWidth="sm" sx={{ px: { xs: 2, md: 4 }, py: { xs: 3, md: 6 } }}>
-                <Typography variant="h4" fontWeight="900" letterSpacing="-0.03em" mb={4}>
-                    My Orders
-                </Typography>
+                <Box display="flex" alignItems="center" mb={4} gap={1}>
+                    <IconButton onClick={() => navigate("/user")} aria-label="back" sx={{ color: "text.primary", ml: -1 }}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h4" fontWeight="900" letterSpacing="-0.03em" sx={{ mb: 0 }}>
+                        My Orders
+                    </Typography>
+                </Box>
 
                 {loading && (
                     <Box display="flex" justifyContent="center" py={8}>
