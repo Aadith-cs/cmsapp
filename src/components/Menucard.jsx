@@ -1,7 +1,8 @@
 import { Card, CardContent, CardMedia, Typography, Button, Box } from "@mui/material";
 
-export default function MenuCard({ item, addToCart }) {
-  const isAvailable = Boolean(item.available);
+export default function MenuCard({ item, addToCart, cartQty = 0 }) {
+  const isAvailable = Boolean(item.available) && (item.stock == null || item.stock > 0);
+  const atMax = item.stock != null && cartQty >= item.stock;
 
   return (
     <Card
@@ -57,6 +58,16 @@ export default function MenuCard({ item, addToCart }) {
         <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 0.5, color: 'text.primary', fontWeight: 600 }}>
           {item.name}
         </Typography>
+
+        {/* Stock count for users */}
+        <Typography variant="caption" sx={{ color: isAvailable ? 'text.secondary' : '#ef4444', fontWeight: 500 }}>
+          {isAvailable
+            ? item.stock != null
+              ? `${item.stock} left in stock`
+              : 'In Stock'
+            : 'Out of Stock'}
+        </Typography>
+
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mt: 2 }}>
           <Typography variant="subtitle1" fontWeight="700" sx={{ color: 'text.primary' }}>
             ₹{item.price}
@@ -66,23 +77,23 @@ export default function MenuCard({ item, addToCart }) {
             size="small"
             variant="outlined"
             disableElevation
-            disabled={!isAvailable}
+            disabled={!isAvailable || atMax}
             onClick={() => addToCart(item)}
             sx={{
-              borderColor: '#e5e7eb',
-              color: 'text.primary',
+              borderColor: atMax ? '#e5e7eb' : '#e5e7eb',
+              color: atMax ? 'text.disabled' : 'text.primary',
               textTransform: 'none',
               fontWeight: 500,
               transition: 'all 0.2s',
-              '&:hover': {
+              '&:hover': !atMax ? {
                 backgroundColor: 'secondary.main',
                 color: '#fff',
                 borderColor: 'secondary.main',
                 transform: 'translateY(-1px)',
-              }
+              } : {},
             }}
           >
-            Add
+            {atMax ? 'Max' : 'Add'}
           </Button>
         </Box>
       </CardContent>

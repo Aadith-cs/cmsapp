@@ -5,6 +5,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
@@ -31,11 +32,15 @@ export default function MyOrders() {
         <>
             <Navbar />
             <Container maxWidth="sm" sx={{ px: { xs: 2, md: 4 }, py: { xs: 3, md: 6 } }}>
-                <Box display="flex" alignItems="center" mb={4} gap={1}>
-                    <IconButton onClick={() => navigate("/user")} aria-label="back" sx={{ color: "text.primary", ml: -1 }}>
+                <Box display="flex" alignItems="center" mb={4}>
+                    <IconButton
+                        disableRipple
+                        onClick={() => navigate("/user")}
+                        sx={{ mr: 2, border: '1px solid #e5e7eb', borderRadius: '50%', '&:hover': { backgroundColor: '#f3f4f6' } }}
+                    >
                         <ArrowBackIcon />
                     </IconButton>
-                    <Typography variant="h4" fontWeight="900" letterSpacing="-0.03em" sx={{ mb: 0 }}>
+                    <Typography variant="h4" fontWeight="900" letterSpacing="-0.03em">
                         My Orders
                     </Typography>
                 </Box>
